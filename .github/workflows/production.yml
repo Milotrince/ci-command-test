@@ -1,0 +1,25 @@
+name: Production
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.event.workflow_run.head_sha || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  setup:
+    name: production-setup
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft || github.run_attempt > 1
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "attempt ${{ github.run_attempt }} draft ${{ github.event.pull_request.draft }}"
+  unit-tests:
+    name: production-unit_tests
+    needs: setup
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo ran
