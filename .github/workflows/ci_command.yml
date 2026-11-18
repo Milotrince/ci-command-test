@@ -49,7 +49,10 @@ jobs:
             const runs = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
               owner, repo, event: 'pull_request', head_sha: pull.head.sha,
             });
-            const runsSkipped = runs.filter((run) => paths.includes(run.path) && run.conclusion === 'skipped');
+            // Several events of one commit (a push and the change of the base branch) each start a run of a workflow.
+            // The runs are listed newest first, and the latest one alone is re-run.
+            const runsLatest = paths.map((path) => runs.find((run) => run.path === path)).filter(Boolean);
+            const runsSkipped = runsLatest.filter((run) => run.conclusion === 'skipped');
             if (runsSkipped.length === 0) {
               core.notice(`Commit ${pull.head.sha} has no skipped run of ${paths.join(', ')} to re-run.`);
               await react('confused');
