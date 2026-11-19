@@ -10,7 +10,7 @@ on:
 permissions:
   actions: write
   issues: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   rerun:
