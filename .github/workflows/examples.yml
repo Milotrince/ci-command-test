@@ -1,0 +1,21 @@
+name: Examples (CPU)
+
+on:
+  # A draft pull request is gated as in the production workflow.
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-examples:
+    runs-on: ubuntu-24.04
+    name: ubuntu-24.04-3.12-examples
+    if: ${{ !github.event.pull_request.draft || github.run_attempt > 1 }}
+
+    steps:
+      - run: echo ran
