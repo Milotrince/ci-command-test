@@ -3,14 +3,17 @@ name: Draft Gate
 # A workflow started by 'workflow_run' never sees the draft flag of the pull request event, so this run carries the
 # draft gate of the production workflow for the workflows that follow it: it concludes 'success' exactly when that gate
 # lets the gated workflows run. A newer commit cancels it, which keeps its followers off a replaced commit.
+permissions: {}
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
       - main
 
+# Pull requests come from forks, whose branch names collide across contributors (see the Nyx Plugin workflow).
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name }} ${{ github.head_ref }}
   cancel-in-progress: true
 
 jobs:
