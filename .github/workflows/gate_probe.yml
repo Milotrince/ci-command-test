@@ -1,0 +1,12 @@
+name: Gate Probe
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    if: ${{ !github.event.pull_request.draft || github.run_attempt > 1 }}
+    steps:
+      - run: echo gate passed
