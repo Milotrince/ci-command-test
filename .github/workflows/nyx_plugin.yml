@@ -1,4 +1,5 @@
 name: Nyx Plugin
+run-name: Nyx Plugin ${{ github.event.workflow_run.head_sha }}
 
 # Checking out the internal plugin repository needs a token, and a pull request coming from a fork is never given
 # one. 'workflow_run' runs in the context of the base repository, where secrets are available, hence the only trigger
