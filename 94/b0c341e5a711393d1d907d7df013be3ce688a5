@@ -1,0 +1,14 @@
+s2.txt
+  h_6855cd90ab4e09 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "94b0c341e5a711393d1d907d7df013be3ce688a5",
+  "prompts": {},
+  "humans": {
+    "h_6855cd90ab4e09": {
+      "author": "Trinity Chung <trinity.chung@genesis-ai.company>"
+    }
+  }
+}
