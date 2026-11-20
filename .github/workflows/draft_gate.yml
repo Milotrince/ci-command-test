@@ -1,0 +1,22 @@
+name: Draft Gate
+
+# A workflow started by 'workflow_run' never sees the draft flag of the pull request event, so this run carries the
+# draft gate of the production workflow for the workflows that follow it: it concludes 'success' exactly when that gate
+# lets the gated workflows run. A newer commit cancels it, which keeps its followers off a replaced commit.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  draft-gate:
+    name: draft-gate
+    if: ${{ !github.event.pull_request.draft || github.run_attempt > 1 }}
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "The pull request is ready for review, or this run is a re-run."

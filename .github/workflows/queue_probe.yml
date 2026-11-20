@@ -1,0 +1,16 @@
+name: Queue Probe
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+jobs:
+  stuck:
+    name: queue-probe
+    if: ${{ (!github.event.pull_request.draft || github.run_attempt > 1) && github.head_ref == 'q1' }}
+    runs-on: [self-hosted, label-that-does-not-exist]
+    steps:
+      - run: echo never
